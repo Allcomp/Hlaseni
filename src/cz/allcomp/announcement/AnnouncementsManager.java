@@ -157,15 +157,7 @@ public class AnnouncementsManager implements Runnable {
 					continue;
 				}
 			
-			long startTime = 
-					a.getTime() 
-					- (long)(tuneDurationSecs*1000) - 
-					this
-					.tuneRecordingPause - 
-					gpioManager
-					.getPowerPause() - 
-					gpioManager
-					.getEnablePause();
+			long startTime = a.getTime() - (long)(tuneDurationSecs*1000) - this.tuneRecordingPause - gpioManager.getPowerPause() - gpioManager.getEnablePause();
 			if(tune == null)
 				startTime += this.tuneRecordingPause;
 			

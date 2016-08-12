@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Čtv 11. srp 2016, 15:24
+-- Vygenerováno: Pát 12. srp 2016, 19:53
 -- Verze MySQL: 5.5.50
 -- Verze PHP: 5.4.45-0+deb7u4
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `announcements` (
   `time` bigint(64) NOT NULL,
   `is_played` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=63 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=70 ;
 
 -- --------------------------------------------------------
 
@@ -50,7 +50,20 @@ CREATE TABLE IF NOT EXISTS `recordings` (
   `file` text COLLATE utf8_bin NOT NULL,
   `time` bigint(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=15 ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `settings`
+--
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT,
+  `key` text COLLATE utf8_bin NOT NULL,
+  `value` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
