@@ -50,7 +50,7 @@ public class GPIOManager {
 			@Override
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
                 // display pin state on console
-                System.out.println("<GPIOManager> Pin state change: " + event.getPin() + " = " + event.getState());
+                Messages.info("<GPIOManager> Pin state change: " + event.getPin() + " = " + event.getState());
                 
                 if(event.getPin() instanceof GpioPinDigitalInput) {
                 	GpioPinDigitalInput pin = (GpioPinDigitalInput)event.getPin();
