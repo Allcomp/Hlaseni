@@ -1,0 +1,4 @@
+﻿#!/bin/sh
+cd /opt/hlaseni/
+java -jar hlaseni.jar
+

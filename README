@@ -1,0 +1,34 @@
+Pokyny pro instalaci:
+
+1) Nainstalujeme balíček pi4j ze složky ./install
+
+	sudo dpkg -i ./install/pi4j-1.1.deb
+
+2) Připravíme MySQL databázi (export ve složce ./database/hlaseni.sql)
+3) Zkopírujeme obsah složky ./web do složky /var/www/<Váš název webu>
+4) Zkopírujeme obsah složky ./server do složky /opt/<Váš název serveru>
+5) Upravíme soubor /var/www/<Váš název webu>/config.php
+
+	Následující řádky přepíšete na své přihlašovací údaje k databázi:
+	
+	$_CONFIG['dbhost'] = "127.0.0.1";
+	$_CONFIG['dbuser'] = "username";
+	$_CONFIG['dbpass'] = "password";
+	$_CONFIG['dbname'] = "database_name";
+
+6) Upravíme soubor /opt/<Váš název serveru>/config/main.cfg
+
+	6 položek se týká nastavení logování, nabývají hodnot true/false
+	web_path - nastavte na /var/www/<Váš název webu>
+	tune_recording_pause - pauza mezi znělkou a hlášením (v milisekundách)
+	database_update_ticks - interval aktualizace dat z databáze (v ticks - přibližně sekunda)
+	post_power_pause - pauza po zapnutí napájení zesilovače (v milisekundách)
+	post_enable_pause - pauza po aktivaci zesilovače (v milisekundách)
+
+7) Připojíme zesilovač na piny znázorněné na obrázku ./res/wiring.png
+8) Upravíme soubor /opt/<Váš název serveru>/spust-hlaseni
+
+	Druhý řádek (začínající na "cd") přepíšeme na "cd /opt/<Váš název serveru>/" (bez uvozovek)
+
+9) Nastavíme práva na zápis/čtení/spouštění (777) na celou složku /var/www/<Váš název webu>/ i její obsah
+10) Spustíme server příkazem /opt/<Váš název serveru>/spust-hlaseni
