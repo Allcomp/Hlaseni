@@ -9,7 +9,7 @@ public class Announcements implements Runnable {
 	public static final String[] VERSION_NAMES = {"Radion"};
 	
 	public static final String VERSION_NAME = VERSION_NAMES[0];
-	public static final String VERSION = "1.0 alpha";
+	public static final String VERSION = "1.1";
 	
 	private boolean running, shouldStop;
 	private Thread routineThread;
@@ -19,7 +19,7 @@ public class Announcements implements Runnable {
 	
 	private StableMysqlConnection database;
 	private AnnouncementsManager announcementsManager;
-	private final GPIOManager gpioManager;
+	private GPIOManager gpioManager;
 	
 	public Announcements() {
 		this.routineThread = new Thread(this);
@@ -27,10 +27,7 @@ public class Announcements implements Runnable {
 		this.shouldStop = true;
 		this.loadConfig();
 		this.setupMessages();
-		this.gpioManager = new GPIOManager(
-				Long.parseLong(this.mainConfig.get("post_power_pause")), 
-				Long.parseLong(this.mainConfig.get("post_enable_pause"))
-		);
+		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				gpioManager.shutdown();
@@ -79,6 +76,12 @@ public class Announcements implements Runnable {
 		this.announcementsManager = new AnnouncementsManager(this.database, this.gpioManager, this.mainConfig.get("web_path"), 
 				Long.parseLong(this.mainConfig.get("tune_recording_pause")),
 				Integer.parseInt(this.mainConfig.get("database_update_ticks")));
+		
+		this.gpioManager = new GPIOManager(
+				Long.parseLong(this.mainConfig.get("post_power_pause")), 
+				Long.parseLong(this.mainConfig.get("post_enable_pause")),
+				this.announcementsManager
+		);
 	}
 	
 	public StableMysqlConnection getDatabase() {

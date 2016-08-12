@@ -12,12 +12,14 @@
 	$classLoader->run();
 	$database = new Database(new DatabaseConfig($_CONFIG['dbhost'], $_CONFIG['dbuser'], $_CONFIG['dbpass'], $_CONFIG['dbname']));
 	
-	$pages = array("main", "recordings", "record", "announcements", "tunes", "error404", "edit_recording", "edit_tune", "edit_announcement");
+	$pages = array("main", "recordings", "record", "announcements", "tunes", "error404", "edit_recording", "edit_tune", "edit_announcement", "settings");
 	
 	function encodeURIComponent($str) {
 		$revert = array('%21'=>'!', '%2A'=>'*', '%27'=>"'", '%28'=>'(', '%29'=>')');
 		return strtr(rawurlencode($str), $revert);
 	}
+	
+	require_once("./init.php");
 ?>
 
 <!DOCTYPE html>
@@ -179,7 +181,8 @@
 				--><li onclick="requestPage('record');">Nahrávání</li><!--
 				--><li onclick="requestPage('recordings');">Záznamy</li><!--
 				--><li onclick="requestPage('tunes');">Znělky</li><!--
-				--><li onclick="requestPage('announcements');">Hlášení</li>
+				--><li onclick="requestPage('announcements');">Hlášení</li><!--
+				--><li onclick="requestPage('settings');">Nastavení</li>
 			</menu>
 		</nav>
 		<div id="bodybg">

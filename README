@@ -25,7 +25,7 @@ Pokyny pro instalaci:
 	post_power_pause - pauza po zapnutí napájení zesilovače (v milisekundách)
 	post_enable_pause - pauza po aktivaci zesilovače (v milisekundách)
 
-7) Připojíme zesilovač na piny znázorněné na obrázku ./res/wiring.png
+7) Připojíme zesilovač, LED a tlačítko na piny znázorněné na obrázku ./res/wiring.png
 8) Upravíme soubor /opt/<Váš název serveru>/spust-hlaseni
 
 	Druhý řádek (začínající na "cd") přepíšeme na "cd /opt/<Váš název serveru>/" (bez uvozovek)

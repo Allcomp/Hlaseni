@@ -31,6 +31,8 @@ public class AnnouncementsManager implements Runnable {
 	private final int databaseUpdateTicks;
 	private final GPIOManager gpioManager;
 	
+	private int defaultTuneLiveAnnouncement;
+	
 	private boolean playing;
 	
 	private int indexPointer;
@@ -51,6 +53,7 @@ public class AnnouncementsManager implements Runnable {
 		this.webPath = webPath;
 		this.tuneRecordingPause = tuneRecordingPause;
 		this.databaseUpdateTicks = databaseUpdateTicks;
+		this.defaultTuneLiveAnnouncement = -1;
 	}
 
 	@Override
@@ -62,6 +65,13 @@ public class AnnouncementsManager implements Runnable {
 		
 		this.shouldStop = false;
 		this.running = true;
+		
+		Messages.info("Initializing default database settings...");
+		try {
+			this.databaseInit();
+		} catch (SQLException e2) {
+			Messages.warning(Messages.getStackTrace(e2));
+		}
 		
 		Messages.info("AnnouncementsManager started.");
 		
@@ -186,6 +196,18 @@ public class AnnouncementsManager implements Runnable {
 		this.running = false;
 	}
 	
+	private void databaseInit() throws SQLException {
+		ResultSet rs = this.database.executeQuery(SqlCommands.LOAD_DEFAULT_TUNE_LIVE_ANNOUNCEMENT);
+		while (rs.next()) {
+			this.defaultTuneLiveAnnouncement = rs.getInt("value");
+			break;
+		}
+		if(this.defaultTuneLiveAnnouncement == -1) {
+			this.defaultTuneLiveAnnouncement = 0;
+			this.database.executeUpdate(SqlCommands.INIT_DEFAULT_TUNE_LIVE_ANNOUNCEMENT);
+		}
+	}
+	
 	private void reloadData() throws SQLException {
 		Messages.info("<AccouncementsManager> Reloading data...");
 		
@@ -197,7 +219,14 @@ public class AnnouncementsManager implements Runnable {
 		int startID_tunes = Integer.MAX_VALUE;
 		int startID_recordings = Integer.MAX_VALUE;
 		
-		ResultSet rs = this.database.executeQuery(SqlCommands.LOAD_ANNOUNCEMENTS
+		ResultSet rs = this.database.executeQuery(SqlCommands.LOAD_DEFAULT_TUNE_LIVE_ANNOUNCEMENT);
+		while (rs.next()) {
+			this.defaultTuneLiveAnnouncement = rs.getInt("value");
+			startID_tunes = this.defaultTuneLiveAnnouncement;
+			break;
+		}
+		
+		rs = this.database.executeQuery(SqlCommands.LOAD_ANNOUNCEMENTS
 				.replace("%time%", (Time.getTime().getTimeStamp()-10000-this.databaseUpdateTicks)+""));
 		while(rs.next()) {
 			int id = rs.getInt("id");
@@ -239,6 +268,29 @@ public class AnnouncementsManager implements Runnable {
 		Messages.info("<AccouncementsManager> Loaded " + this.tunes.size() + " tunes.");
 		Messages.info("<AccouncementsManager> Loaded " + this.recordings.size() + " recordings.");
 		Messages.info("<AccouncementsManager> Loaded " + this.announcements.size() + " announcements.");
+		
+		Tune deftune = this.getTune(this.defaultTuneLiveAnnouncement);
+		if(deftune == null)
+			Messages.info("<AccouncementsManager> No tune for live announcement has been set.");
+		else
+			Messages.info("<AccouncementsManager> Tune '" + deftune.getName() + "' is now set for live announcement.");
+	}
+	
+	public void setPlaying(boolean val) {
+		this.playing = val;
+	}
+	
+	public void playDefaultTuneForLiveAnnouncement() {
+		Tune tune = this.getTune(this.defaultTuneLiveAnnouncement);
+		if(tune != null) {
+			String tuneFilePath = this.webPath + "tunes/" + tune.getFile();
+			File tuneFile = new File(tuneFilePath);
+			
+			if(!tuneFile.exists())
+				return;
+			
+			SoundsManager.playWavFile(tuneFilePath);
+		}
 	}
 	
 	private Tune getTune(int id) {

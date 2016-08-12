@@ -30,4 +30,6 @@ public class SqlCommands {
 	public static String LOAD_RECORDINGS = "SELECT * FROM `recordings` WHERE `id` >= '%start_id%' ORDER BY `id` ASC;";
 	public static String LOAD_TUNES = "SELECT * FROM `tunes` WHERE `id` >= '%start_id%' ORDER BY `id` ASC;";
 	public static String LOAD_ANNOUNCEMENTS = "SELECT * FROM `announcements` WHERE `time` > '%time%' ORDER BY `time` ASC;";
+	public static String LOAD_DEFAULT_TUNE_LIVE_ANNOUNCEMENT = "SELECT * FROM `settings` WHERE `key` LIKE 'default_tune_live_announcement';";
+	public static String INIT_DEFAULT_TUNE_LIVE_ANNOUNCEMENT = "INSERT INTO `settings` (`id` ,`key` ,`value`) VALUES (NULL, 'default_tune_live_announcement', '0');";
 }
