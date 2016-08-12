@@ -73,15 +73,20 @@ public class Announcements implements Runnable {
 			Integer.parseInt(this.databaseConfig.get("port"))
 		);
 
-		this.announcementsManager = new AnnouncementsManager(this.database, this.gpioManager, this.mainConfig.get("web_path"), 
+		this.announcementsManager = new AnnouncementsManager(this.database, this, 
+				this.mainConfig.get("web_path"), 
 				Long.parseLong(this.mainConfig.get("tune_recording_pause")),
 				Integer.parseInt(this.mainConfig.get("database_update_ticks")));
 		
 		this.gpioManager = new GPIOManager(
 				Long.parseLong(this.mainConfig.get("post_power_pause")), 
 				Long.parseLong(this.mainConfig.get("post_enable_pause")),
-				this.announcementsManager
+				this
 		);
+	}
+	
+	public GPIOManager getGPIOManager() {
+		return this.gpioManager;
 	}
 	
 	public StableMysqlConnection getDatabase() {

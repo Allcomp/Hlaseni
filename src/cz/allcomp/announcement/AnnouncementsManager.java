@@ -29,7 +29,7 @@ public class AnnouncementsManager implements Runnable {
 	private final String webPath;
 	private final long tuneRecordingPause;
 	private final int databaseUpdateTicks;
-	private final GPIOManager gpioManager;
+	private Announcements announcementsObject;
 	
 	private int defaultTuneLiveAnnouncement;
 	
@@ -37,13 +37,13 @@ public class AnnouncementsManager implements Runnable {
 	
 	private int indexPointer;
 	
-	public AnnouncementsManager(StableMysqlConnection database, GPIOManager gpioManager, String webPath, long tuneRecordingPause, int databaseUpdateTicks) {
+	public AnnouncementsManager(StableMysqlConnection database, Announcements announcementsObject, String webPath, long tuneRecordingPause, int databaseUpdateTicks) {
 		this.routineThread = new Thread(this);
 		this.running = false;
 		this.shouldStop = true;
 		this.playing = false;
 		this.database = database;
-		this.gpioManager = gpioManager;
+		this.announcementsObject = announcementsObject;
 		this.announcements = new ArrayList<>();
 		this.recordings = new ArrayList<>();
 		this.tunes = new ArrayList<>();
@@ -74,6 +74,7 @@ public class AnnouncementsManager implements Runnable {
 		}
 		
 		Messages.info("AnnouncementsManager started.");
+		GPIOManager gpioManager = this.announcementsObject.getGPIOManager();
 		
 		int loopCounter = -1;
 		while(!this.shouldStop) {
@@ -156,13 +157,21 @@ public class AnnouncementsManager implements Runnable {
 					continue;
 				}
 			
-			long startTime = a.getTime() - (long)(tuneDurationSecs*1000) - this.tuneRecordingPause - this.gpioManager.getPowerPause() - this.gpioManager.getEnablePause();
+			long startTime = 
+					a.getTime() 
+					- (long)(tuneDurationSecs*1000) - 
+					this
+					.tuneRecordingPause - 
+					gpioManager
+					.getPowerPause() - 
+					gpioManager
+					.getEnablePause();
 			if(tune == null)
 				startTime += this.tuneRecordingPause;
 			
 			long printTime = (startTime - Time.getTime().getTimeStamp())/1000;
 			if(printTime > 0)
-				Messages.info("Announcement '"+a.getName()+"' will start in " + (printTime+(this.gpioManager.getPowerPause()+this.gpioManager.getEnablePause())/1000) + " seconds.");
+				Messages.info("Announcement '"+a.getName()+"' will start in " + (printTime+(gpioManager.getPowerPause()+gpioManager.getEnablePause())/1000) + " seconds.");
 			else
 				Messages.info("Announcement '"+a.getName()+"' will start in the moment.");
 			
@@ -172,7 +181,7 @@ public class AnnouncementsManager implements Runnable {
 				new Thread(()->{
 					this.playing = true;
 					Messages.info("<AnnouncementsManager> Enabling amplifier...");
-					this.gpioManager.useAmplifier();
+					gpioManager.useAmplifier();
 					Messages.info("<AnnouncementsManager> Starting to play '" + a.getName() + "'...");
 					if(tune != null) {
 						SoundsManager.playWavFile(finalTunePath);
@@ -185,7 +194,7 @@ public class AnnouncementsManager implements Runnable {
 					SoundsManager.playWavFile(recordingFilePath);
 					Messages.info("<AnnouncementsManager> Playing finished.");
 					Messages.info("<AnnouncementsManager> Disabling amplifier...");
-					this.gpioManager.unuseAmplifier();
+					gpioManager.unuseAmplifier();
 					Messages.info("<AnnouncementsManager> Amplifier disabled.");
 					this.playing = false;
 				}).start();
@@ -280,17 +289,31 @@ public class AnnouncementsManager implements Runnable {
 		this.playing = val;
 	}
 	
-	public void playDefaultTuneForLiveAnnouncement() {
+	public Process playDefaultTuneForLiveAnnouncement() {
 		Tune tune = this.getTune(this.defaultTuneLiveAnnouncement);
 		if(tune != null) {
 			String tuneFilePath = this.webPath + "tunes/" + tune.getFile();
 			File tuneFile = new File(tuneFilePath);
 			
 			if(!tuneFile.exists())
-				return;
+				return null;
 			
-			SoundsManager.playWavFile(tuneFilePath);
+			return SoundsManager.playWavFileGetRuntime(tuneFilePath);
 		}
+		return null;
+	}
+	
+	public double getDefaultTuneForLiveAnnouncementDuration() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+		Tune tune = this.getTune(this.defaultTuneLiveAnnouncement);
+		if(tune == null)
+			return 0;
+		String tuneFilePath = this.webPath + "tunes/" + tune.getFile();
+		File tuneFile = new File(tuneFilePath);
+		
+		if(!tuneFile.exists())
+			return 0;
+		
+		return SoundsManager.getWavFileDuration(tuneFilePath);
 	}
 	
 	private Tune getTune(int id) {

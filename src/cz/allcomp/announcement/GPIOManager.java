@@ -1,5 +1,10 @@
 package cz.allcomp.announcement;
 
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
@@ -22,13 +27,15 @@ public class GPIOManager {
 	
 	private PinState lastButtonState;
 	
-	private final AnnouncementsManager announcementManager;
+	private Announcements announcements;
 	
 	private final long powerPause, enablePause;
 	
-	private boolean enableLiveAnnouncement, buttonBlocked;
+	private Process currentProcess;
 	
-	public GPIOManager(long powerPause, long enablePause, AnnouncementsManager announcementManager) {
+	//private boolean enableLiveAnnouncement, buttonBlocked;
+	
+	public GPIOManager(long powerPause, long enablePause, Announcements announcements) {
 		this.gpio = GpioFactory.getInstance();
 		this.pinAmplifierPower = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "AmplifierPower", PinState.LOW);
 		this.pinAmplifierEnable = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "AmplifierEnable", PinState.LOW);
@@ -41,9 +48,10 @@ public class GPIOManager {
 		this.powerPause = powerPause;
 		this.enablePause = enablePause;
 		this.lastButtonState = PinState.HIGH;
-		this.announcementManager = announcementManager;
-		this.enableLiveAnnouncement = false;
-		this.buttonBlocked = false;
+		this.announcements = announcements;
+		//this.enableLiveAnnouncement = false;
+		//this.buttonBlocked = false;
+		this.currentProcess = null;
 		
 		this.pinButton.addListener(new GpioPinListenerDigital() {
            
@@ -61,7 +69,14 @@ public class GPIOManager {
                 		
                 		if(event.getState() == PinState.HIGH) {
                 			if(lastButtonState == PinState.LOW)
-                				buttonClicked();
+								try {
+									if(startedPlayingLive)
+										shouldBreakLive = true;
+									buttonClicked();
+								} catch (InterruptedException | LineUnavailableException | IOException
+										| UnsupportedAudioFileException e) {
+									Messages.warning(Messages.getStackTrace(e));
+								}
                 			lastButtonState = PinState.HIGH;
                 		}
                 	}
@@ -70,21 +85,87 @@ public class GPIOManager {
 
         });
 	}
+
+	private boolean startedPlayingLive = false;
+	private boolean shouldBreakLive = false;
 	
-	private void buttonClicked() {
+	private void buttonClicked() throws InterruptedException, LineUnavailableException, IOException, UnsupportedAudioFileException {
+		if(!this.startedPlayingLive) {
+			AnnouncementsManager announcementsManager = this.announcements.getAnnouncementsManager();
+			
+			this.startedPlayingLive = true;
+			this.shouldBreakLive = false;
+
+			Messages.info("<GPIOManager> Starting live output...");
+			announcementsManager.setPlaying(true);
+			Messages.info("<GPIOManager> Enabling amplifier...");
+			new Thread(() -> {
+				this.useAmplifier();
+			});
+			for(int i = 0; i < (this.enablePause+this.powerPause)/100; i++) {
+				Thread.sleep(100);
+				if(this.shouldBreakLive) {
+					this.startedPlayingLive = false;
+					announcementsManager.setPlaying(false);
+					Thread.sleep(this.enablePause+this.powerPause+100-i*100);
+					this.unuseAmplifier();
+					Messages.info("<GPIOManager> Live output interrupted.");
+					return;
+				}
+			}
+			Messages.info("<GPIOManager> Playing tune...");
+			long duration = (long)(announcementsManager.getDefaultTuneForLiveAnnouncementDuration()*1000);
+			this.currentProcess = announcementsManager.playDefaultTuneForLiveAnnouncement();
+			for(int i = 0; i < duration/100; i++) {
+				Thread.sleep(100);
+				if(this.shouldBreakLive) {
+					this.startedPlayingLive = false;
+					announcementsManager.setPlaying(false);
+					this.currentProcess.destroy();
+					Runtime.getRuntime().exec("killall omxplayer.bin");
+					this.currentProcess = null;
+					Messages.info("<GPIOManager> Live output interrupted.");
+					return;
+				}
+			}
+			this.pinLed.high();
+			Messages.info("<GPIOManager> Speaking is now possible.");
+			while(!this.shouldBreakLive);
+			Messages.info("<GPIOManager> Speaking is not possible anymore.");
+			this.pinLed.low();
+			Messages.info("<GPIOManager> Disabling amplifier...");
+			this.unuseAmplifier();
+			Messages.info("<GPIOManager> Live output ended.");
+			announcementsManager.setPlaying(false);
+			this.currentProcess = null;
+			this.startedPlayingLive = false;
+		}
+	}
+	
+	/*private void buttonClicked2() throws InterruptedException {
 		if(this.buttonBlocked)
 			return;
 		if(!this.enableLiveAnnouncement) {
 			this.buttonBlocked = true;
+
 			this.enableLiveAnnouncement = true;
 			Messages.info("<GPIOManager> Starting live output...");
 			this.announcementManager.setPlaying(true);
-			Messages.info("<GPIOManager> Enabling amplifier...");
-			this.useAmplifier();
+			
+			new Thread(() -> {
+				Messages.info("<GPIOManager> Enabling amplifier...");
+				this.useAmplifier();
+			});
+			
+			for(int i = 0; i < (this.powerPause+this.enablePause)/100; i++) {
+				Thread.sleep(100);
+			}
+			
 			Messages.info("<GPIOManager> Playing tune...");
 			this.announcementManager.playDefaultTuneForLiveAnnouncement();
 			this.pinLed.high();
 			Messages.info("<GPIOManager> Speaking is now possible.");
+			
 			this.buttonBlocked = false;
 		} else {
 			this.buttonBlocked = true;
@@ -97,7 +178,7 @@ public class GPIOManager {
 			this.announcementManager.setPlaying(false);
 			this.buttonBlocked = false;
 		}
-	}
+	}*/
 	
 	public void useAmplifier() {
 		this.powerOnAmplifier();

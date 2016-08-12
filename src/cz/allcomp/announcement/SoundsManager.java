@@ -66,4 +66,16 @@ public class SoundsManager {
 			Messages.error(Messages.getStackTrace(e));
 		}
 	}
+	
+	public static Process playWavFileGetRuntime(String path) {
+		Runtime r = Runtime.getRuntime();
+		try {
+			Process p = r.exec("omxplayer " + path);
+			return p;
+		} catch (IOException e) {
+			Messages.error("Could not play file " + path + "!");
+			Messages.error(Messages.getStackTrace(e));
+		}
+		return null;
+	}
 }
