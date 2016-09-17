@@ -1,5 +1,9 @@
 package cz.allcomp.announcement;
 
+import java.io.IOException;
+
+import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
+
 import cz.allcomp.shs.cfg.Configuration;
 import cz.allcomp.shs.database.StableMysqlConnection;
 import cz.allcomp.shs.logging.Messages;
@@ -43,7 +47,11 @@ public class Announcements implements Runnable {
 		}
 		
 		this.shouldStop = false;
-		this.init();
+		try {
+			this.init();
+		} catch (NumberFormatException | UnsupportedBusNumberException | IOException e) {
+			Messages.error(Messages.getStackTrace(e));
+		}
 		this.running = true;
 		
 		this.announcementsManager.start();
@@ -57,7 +65,7 @@ public class Announcements implements Runnable {
 		this.running = false;
 	}
 	
-	private void init() {
+	private void init() throws NumberFormatException, UnsupportedBusNumberException, IOException {
 		Messages.info("Announcements system version: " + VERSION_NAME + " " + VERSION + "...");
 		Messages.info("Establishing connection to MySQL database");
 		Messages.info(">> host: " + this.databaseConfig.get("host"));

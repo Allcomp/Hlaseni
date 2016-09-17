@@ -32,3 +32,5 @@ Pokyny pro instalaci:
 
 9) Nastavíme práva na zápis/čtení/spouštění (777) na celou složku /var/www/<Váš název webu>/ i její obsah
 10) Spustíme server příkazem /opt/<Váš název serveru>/spust-hlaseni
+
+BONUS) Může se vyskytnout chyba při nahrávání souborů. To je způsobeno nastavením souboru php.ini - omezení velikosti nahrávaných souborů. Otevřete soubor /etc/php5/apache2/php.ini a upravte parametry 'post_max_size' a 'upload_max_size' podle své potřeby.

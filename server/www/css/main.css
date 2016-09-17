@@ -1,0 +1,619 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding-top: 60px;
+    background-color: #eeeeee;
+    height:100%; width:100%;
+    font-family: Verdana, Geneva, sans-serif;
+    color: #373737;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div#navigationBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    width: 100%;
+    background: #eeeeee; /* Old browsers */
+    background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+    -webkit-box-shadow: 0px 4px 9px 0px rgba(105, 105, 105, 0.44);
+    -moz-box-shadow: 0px 4px 9px 0px rgba(105, 105, 105, 0.44);
+    box-shadow: 0px 4px 9px 0px rgba(105, 105, 105, 0.44);
+	z-index: 1000;
+}
+
+div#navigationBar div.goBack {
+    width: 50px;
+    float: left;
+    text-align: left;
+    line-height: 60px;
+    font-size: 35px;
+    padding: 0 20px;
+}
+
+div#navigationBar div.goBack img {
+    width: 40px;
+    height: 40px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+div#navigationBar div.location {
+    width: calc(100% - 180px);
+    float: left;
+    text-align: center;
+	
+    line-height: 1.2em;
+	  height: 66px;
+	  
+    font-size: 1.3em;
+    text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+}
+
+div#navigationBar div.location:before {
+	content:'';
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: -.05em;
+	height: 100%;
+}
+
+div#navigationBar div.location span {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+div#navigationBar div.goHome {
+    width: 50px;
+    float: right;
+    text-align: right;
+    line-height: 60px;
+    padding: 0 20px;
+}
+
+div#navigationBar div.goHome img {
+    width: 30px;
+    height: 30px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+table.loginTable {
+	text-align: left;
+	border-spacing: 5px;
+    border-collapse: separate;
+}
+
+table.loginTable tr td:first-of-type {
+	text-shadow: 2px 2px 3px rgba(150, 150, 150, 1);
+}
+
+table.loginTable input[type="submit"] {
+	background-color: #27ae60;
+	border: none;
+	-webkit-box-shadow: 2px 2px 11px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 2px 2px 11px 0px rgba(0,0,0,0.75);
+	box-shadow: 2px 2px 11px 0px rgba(0,0,0,0.75);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
+	margin-top: 5px;
+	color: #eeeeee;
+	cursor: hand;
+	cursor: pointer;
+	font-size: 11px;
+}
+
+table.loginTable input[type="text"], table.loginTable input[type="password"] {
+	padding: 3px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #dddddd;
+	color: #555555;
+}
+
+div.mainMenu {
+    display: block;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+	padding-top: 10px;
+}
+
+div.mainMenu div.item {
+    width: 100px;
+    display: inline-block;
+    margin: 10px;
+    cursor: pointer;
+}
+
+div.mainMenu div.item div.label {
+    width: 100px;
+    text-align: center;
+    text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
+}
+
+div.rooms,
+div.roomControls,
+div.macros,
+div.securityCameras,
+div.lastUsedControls {
+    display: block;
+    width: 100%;
+}
+
+div.lastUsedControls {
+	margin-top: 20px;
+}
+
+div.security, div.securityCameras {
+	margin-top: 0px;
+}
+
+div.security {
+	margin-top: 30px;
+}
+
+div.securityCameras iframe {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	border: none;
+}
+
+div.security div.numkeyboard, div.security div.securityitems, 
+div.security div.activesecurityinputs, div.security div.scontrol {
+	width: 308px;
+	margin-left: auto;
+	margin-right: auto;
+	border-top: 3px solid #DDDDDD;
+}
+
+div.simulator {
+	max-width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	border-top: 3px solid #DDDDDD;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+div.simulator input[type='text'].date {
+	padding: 5px;
+	border: none;
+	color: #27ae60;
+	font-weight: bold;
+	background-color: transparent;
+	cursor: hand;
+	cursor: pointer;
+	width: 144px;
+	font-size: 15px;
+}
+
+div.simulator button.macrobtn {
+	padding: 5px;
+	border: none;
+	background-color: #27ae60;
+	font-weight: bold;
+	color: #EEEEEE;
+	cursor: hand;
+	cursor: pointer;
+}
+
+div.simulator button.macrobtn:hover {
+	background-color: #2ecc71;
+}
+
+div.simulator {
+	padding-top: 10px;
+}
+
+div.simulator table {
+    border: none;
+    table-layout: fixed;
+    max-width: 500px;
+	width: 100%;
+}
+
+div.simulator table th, td {
+    border: none;
+    overflow: hidden;
+    width: 50%;
+	letter-spacing: 1px;
+	text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+	font-family: Verdana, Geneva, sans-serif;
+}
+
+/*div.security div.scontrol {
+	margin-top: 55px;
+	border: none;
+}
+
+div.security div.scontrol div.turnallon {
+	display: inline-block;
+	height: 30px;
+	padding: 0 10px;
+	line-height: 30px;
+	font-weight: bold;
+	background-color: #664433;
+	float: left;
+	width: 133px;
+	text-align: center;
+	color: #DDDDDD;
+	font-size: 12px;
+}
+
+div.security div.scontrol div.turnalloff {
+	display: inline-block;
+	height: 30px;
+	padding: 0 10px;
+	line-height: 30px;
+	font-weight: bold;
+	background-color: #664433;
+	margin-left: 2px;
+	float: right;
+	width: 133px;
+	text-align: center;
+	color: #DDDDDD;
+	font-size: 12px;
+}*/
+
+div.security div.securityitems {
+	margin-top: 55px;/*20px*/
+	margin-bottom: 0; /*30px;*/
+	border: none;
+}
+
+div.security div.securityitems div.sitem {
+	margin-bottom: 2px;
+	width: 288px;
+	height: 50px;
+	background-color: #27ae60;
+	font-weight: bold;
+	color: #DDDDDD;
+	line-height: 50px;
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+div.security div.securityitems div.sitemred { /*if security system is enabled*/
+	background-color: #f2853b;
+}
+
+div.security div.activesecurityinputs {
+	margin-top: 20px;
+	margin-bottom: 30px;
+	border: 2px solid #e67e22;
+	padding: 10px;
+	width: 284px;
+}
+
+div.security div.activesecurityinputs div.securitygroup {
+	margin-bottom: 20px;
+}
+
+div.security div.activesecurityinputs div.title {
+	display: inline-block;
+	width: 288px;
+	font-size: 15px;
+	font-weight: bold;
+	color: #404040;
+	text-align: right;
+	display: none;
+}
+
+div.security div.activesecurityinputs div.title img {
+	display: inline;
+	width: 20px;
+	height: 20px;
+}
+
+div.security div.activesecurityinputs div.securitytitle {
+	display: inline-block;
+	width: 288px;
+	font-size: 20px;
+	font-variant: small-caps;
+	color: #c0392b;
+	font-weight: bold;
+}
+
+div.security div.activesecurityinputs div.securityinput {
+	display: inline-block;
+	width: 288px;
+	font-size: 13px;
+	color: #404040;
+}
+ 
+div.security div.numkeyboard div.value {
+	width: 306px;
+	min-width: 306px;
+	max-width: 306px;
+	height: 50px;
+	min-height: 50px;
+	max-height: 50px;
+	line-height: 50px;
+	margin: 1px;
+	background-color: #EEEEEE;
+	display: inline-block;
+	text-align: center;
+	-webkit-text-security: none;
+	-moz-text-security: none;
+	text-security: none;
+}
+
+div.security div.numkeyboard div.value span {
+	font-size: 30px;
+}
+
+div.security div.numkeyboard div.value div {
+	-webkit-text-security: none;
+	-moz-text-security: none;
+	text-security: none;
+}
+
+div.security div.numkeyboard button { 
+	background-color: #27ae60;
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	margin: 1px;
+	border: none;
+	cursor: hand;
+	cursor: pointer;
+	color: #DDDDDD;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+div.security div.numkeyboard button:hover { 
+	background-color: #2ecc71;
+}
+
+div.security div.numkeyboard button.activate {
+	font-size: 12px;
+	transform: translate(0, -2px);
+}
+
+div.security div.state {
+	font-size: 16px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+div.rooms div.item,
+div.roomControls div.item,
+div.macros div.item {
+    display: block;
+    max-width: 600px;
+    min-height: 50px;
+    line-height: 50px;
+    background-color: #f4f4f4;
+    margin-bottom: 2px;
+    cursor: pointer;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.lastUsedControls div.separator {
+	display: block;
+    max-width: 580px;
+    height: 30px;
+    line-height: 30px;
+    background-color: transparent;
+	color: #373737;
+	/*font-weight: bold;*/
+	font-variant: small-caps;
+    text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+	font-size: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+    margin-bottom: 2px;
+    cursor: pointer;
+	margin-left: auto;
+	margin-right: auto;
+	border-bottom: 1px solid #373737;
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 10px;
+}
+
+div.lastUsedControls div.roomName {
+	display: block;
+    max-width: 580px;
+    height: 30px;
+    line-height: 30px;
+    background-color: transparent;
+	color: #373737;
+	/*font-weight: bold;*/
+	font-variant: small-caps;
+	font-size: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+    margin-bottom: 2px;
+    cursor: pointer;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+    text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+}
+
+div.lastUsedControls div.item {
+    display: block;
+    max-width: 600px;
+    min-height: 50px;
+    line-height: 50px;
+    background-color: #f4f4f4;
+    margin-bottom: 2px;
+    cursor: pointer;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.roomControls div.item,
+div.lastUsedControls div.item {
+    cursor: default;
+    overflow:hidden;
+    clear: both;
+}
+
+div.rooms div.item:first-of-type,
+div.roomControls div.item:first-of-type,
+div.lastUsedControls div.item:first-of-type,
+div.macros div.item:first-of-type {
+    padding-top: 10px;
+}
+
+div.rooms div.item div.label,
+div.roomControls div.item div.label,
+div.lastUsedControls div.item div.label,
+div.macros div.item div.label {
+    float: left;
+    padding: 0 10px;
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+    letter-spacing: 1px;
+}
+
+div.roomControls div.item div.label div.text,
+div.lastUsedControls div.item div.label div.text {
+    display: inline;
+}
+
+div.roomControls div.item div.label img,
+div.lastUsedControls div.item div.label img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    transform: translate(0px, 7px); /* "7.5 px" not logically possible */
+}
+
+div.rooms div.item div.controls,
+div.roomControls div.item div.controls,
+div.lastUsedControls div.item div.controls,
+div.macros div.item div.controls {
+    float: right;
+    padding: 0 10px;
+    text-align: right;
+}
+
+div.roomControls div.item div.controls,
+div.lastUsedControls div.item div.controls {
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+}
+
+div.roomControls div.item div.controls div.controlUpDownContainer,
+div.lastUsedControls div.item div.controls div.controlUpDownContainer {
+	display: inline-block;
+	text-align: left;
+    transform: translate(-20px, 0px);
+	width: 50px;
+	height: 50px;
+	padding: 0;
+	margin: 0;
+}
+
+div.roomControls div.item div.controls button.controlUp,
+div.lastUsedControls div.item div.controls button.controlUp {
+	width: 49px;
+	height: 24px;
+	padding: 0;
+	margin: 0;
+	display: inline;
+}
+
+div.roomControls div.item div.controls button.controlDown,
+div.lastUsedControls div.item div.controls button.controlDown {
+	width: 49px;
+	height: 24px;
+	padding: 0;
+	margin: 0;
+	display: inline;
+}
+
+div.roomControls div.item div.controls div.tempval,
+div.lastUsedControls div.item div.controls div.tempval {
+    text-align: right;
+    display: inline-block;
+    transform: translate(-13px, 0px);
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+}
+
+div.roomControls div.item div.controls div.thermval,
+div.lastUsedControls div.item div.controls div.thermval {
+    text-align: right;
+    display: inline-block;
+    transform: translate(-13px, 0px);
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+}
+
+div.roomControls div.item div.controls div.tempactive input[type="number"],
+div.lastUsedControls div.item div.controls div.tempactive input[type="number"] {
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+    width: 50px;
+    border: none;
+    background-color: transparent;
+    height: 40px;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div.roomControls div.item div.controls div.tempactive input[type="number"]:focus,
+div.lastUsedControls div.item div.controls div.tempactive input[type="number"]:focus {
+    outline: none;
+}
+
+div.roomControls div.item div.controls div.tempactive input[type="number"]:after,
+div.lastUsedControls div.item div.controls div.tempactive input[type="number"]:after {
+    content:' °C';
+}
+
+div.rooms div.item div.controls img,
+div.macros div.item div.controls img{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    transform: translate(0px, 7px);
+}
+
+div.notification {
+    position: fixed;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    overflow:hidden;
+    font-size: 20px;
+    color: #FFFFFF;
+    background-color: rgba(50, 50, 50, 0.5);
+}
+
+div.notifcenter {
+    position:absolute;
+    top:0; left:0; bottom:0; right:0;
+    margin: auto;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+     /* for horiz left-align, try "margin: auto auto auto 0" */
+}

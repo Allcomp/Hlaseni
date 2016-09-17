@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MainConfig>
+    <smartserver>
+		<ip>10.0.0.177</ip>
+		<port>81</port>
+	</smartserver>
+</MainConfig>

@@ -1,0 +1,342 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding-top: 60px;
+    background-color: #eeeeee;
+    height:100%; width:100%;
+    font-family: Verdana, Geneva, sans-serif;
+    color: #373737;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div#navigationBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    width: 100%;
+    background: #eeeeee; /* Old browsers */
+    background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+    -webkit-box-shadow: 0px 4px 9px 0px rgba(105, 105, 105, 0.44);
+    -moz-box-shadow: 0px 4px 9px 0px rgba(105, 105, 105, 0.44);
+    box-shadow: 0px 4px 9px 0px rgba(105, 105, 105, 0.44);
+}
+
+div#navigationBar div.goBack {
+    width: 50px;
+    float: left;
+    text-align: left;
+    line-height: 60px;
+    font-size: 35px;
+    padding: 0 20px;
+}
+
+div#navigationBar div.goBack img {
+    width: 40px;
+    height: 40px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+div#navigationBar div.location {
+    width: calc(100% - 180px);
+    float: left;
+    text-align: center;
+    line-height: 60px;
+    font-size: 1.3em;
+    text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+}
+
+div#navigationBar div.goHome {
+    width: 50px;
+    float: right;
+    text-align: right;
+    line-height: 60px;
+    padding: 0 20px;
+}
+
+div#navigationBar div.goHome img {
+    width: 30px;
+    height: 30px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+table.loginTable {
+	text-align: left;
+	border-spacing: 5px;
+    border-collapse: separate;
+}
+
+table.loginTable tr td:first-of-type {
+	text-shadow: 2px 2px 3px rgba(150, 150, 150, 1);
+}
+
+table.loginTable input[type="submit"] {
+	background-color: #27ae60;
+	border: none;
+	-webkit-box-shadow: 2px 2px 11px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 2px 2px 11px 0px rgba(0,0,0,0.75);
+	box-shadow: 2px 2px 11px 0px rgba(0,0,0,0.75);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
+	margin-top: 5px;
+	color: #eeeeee;
+	cursor: hand;
+	cursor: pointer;
+	font-size: 11px;
+}
+
+table.loginTable input[type="text"], table.loginTable input[type="password"] {
+	padding: 3px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #dddddd;
+	color: #555555;
+}
+
+div.mainMenu {
+    display: block;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+div.mainMenu div.item {
+    width: 100px;
+    display: inline-block;
+    margin: 10px;
+    cursor: pointer;
+}
+
+div.mainMenu div.item div.label {
+    width: 100px;
+    text-align: center;
+}
+
+div.rooms,
+div.roomControls,
+div.macros {
+    display: block;
+    width: 100%;
+}
+
+div.security {
+	margin-top: 30px;
+}
+
+div.security div.numkeyboard {
+	background-color: #DDDDDD;
+	width: 308px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.security div.numkeyboard div.value {
+	width: 306px;
+	min-width: 306px;
+	max-width: 306px;
+	height: 50px;
+	min-height: 50px;
+	max-height: 50px;
+	line-height: 50px;
+	margin: 1px;
+	background-color: #EEEEEE;
+	display: inline-block;
+	text-align: center;
+}
+
+div.security div.numkeyboard button { 
+	background-color: #27ae60;
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	margin: 1px;
+	border: none;
+	cursor: hand;
+	cursor: pointer;
+	color: #DDDDDD;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+div.security div.numkeyboard button:hover { 
+	background-color: #2ecc71;
+}
+
+div.security div.numkeyboard button.activate {
+	font-size: 12px;
+	transform: translate(0, -2px);
+}
+
+div.security div.state {
+	font-size: 16px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+div.rooms div.item,
+div.roomControls div.item,
+div.macros div.item {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    line-height: 50px;
+    background-color: #f4f4f4;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+div.roomControls div.item {
+    cursor: default;
+    overflow:hidden;
+    clear: both;
+}
+
+div.rooms div.item:first-of-type,
+div.roomControls div.item:first-of-type,
+div.macros div.item:first-of-type {
+    padding-top: 10px;
+}
+
+div.rooms div.item div.label,
+div.roomControls div.item div.label,
+div.macros div.item div.label {
+    float: left;
+    padding: 0 10px;
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+    letter-spacing: 1px;
+}
+
+div.roomControls div.item div.label div.text {
+    display: inline;
+}
+
+div.roomControls div.item div.label img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    transform: translate(0px, 7px); /* "7.5 px" not logically possible */
+}
+
+div.rooms div.item div.controls,
+div.roomControls div.item div.controls,
+div.macros div.item div.controls {
+    float: right;
+    padding: 0 10px;
+    text-align: right;
+}
+
+div.roomControls div.item div.controls {
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+}
+
+div.roomControls div.item div.controls div.controlUpDownContainer {
+	display: inline-block;
+	text-align: left;
+    transform: translate(-20px, 0px);
+	width: 50px;
+	height: 50px;
+	padding: 0;
+	margin: 0;
+}
+
+div.roomControls div.item div.controls button.controlUp {
+	width: 49px;
+	height: 24px;
+	padding: 0;
+	margin: 0;
+	display: inline;
+}
+
+div.roomControls div.item div.controls button.controlDown {
+	width: 49px;
+	height: 24px;
+	padding: 0;
+	margin: 0;
+	display: inline;
+}
+
+div.roomControls div.item div.controls div.tempval {
+    text-align: right;
+    display: inline-block;
+    transform: translate(-13px, 0px);
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+}
+
+div.roomControls div.item div.controls div.thermval {
+    text-align: right;
+    display: inline-block;
+    transform: translate(-13px, 0px);
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+}
+
+div.roomControls div.item div.controls div.tempactive input[type="number"] {
+    text-shadow: 1px 1px 2px rgba(165, 165, 165, 1);
+    width: 50px;
+    border: none;
+    background-color: transparent;
+    height: 40px;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div.roomControls div.item div.controls div.tempactive input[type="number"]:focus {
+    outline: none;
+}
+
+div.roomControls div.item div.controls div.tempactive input[type="number"]:after {
+    content:' °C';
+}
+
+div.rooms div.item div.controls img,
+div.macros div.item div.controls img{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    transform: translate(0px, 7px);
+}
+
+div.notification {
+    position: fixed;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    overflow:hidden;
+    font-size: 20px;
+    color: #FFFFFF;
+    background-color: rgba(50, 50, 50, 0.5);
+}
+
+div.notifcenter {
+    position:absolute;
+    top:0; left:0; bottom:0; right:0;
+    margin: auto;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+     /* for horiz left-align, try "margin: auto auto auto 0" */
+}

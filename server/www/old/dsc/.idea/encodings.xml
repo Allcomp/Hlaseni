@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/css/inputsRange.css" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/css/main.css" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/css/radioButtons.css" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/css/switches.css" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jslib/Control.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jslib/DataStore.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jslib/Macro.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jslib/Room.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jslib/jquery-2.1.4.min.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jslib/jquery-2.1.4.min.map" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/phplib/ClassLoader.class.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/phplib/Database.class.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/phplib/DatabaseConfig.class.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/phplib/loadJavascriptData.php" charset="UTF-8" />
+  </component>
+</project>

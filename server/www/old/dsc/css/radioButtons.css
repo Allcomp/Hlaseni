@@ -1,0 +1,109 @@
+div.radioContainer {
+	margin: 5px;
+    display: inline-block;
+	clear: both;
+	transform: translate(-10px, 0px);
+}
+
+div.radioContainer label {
+    width: 2.40em; 
+    height: 2.40em;
+    border-radius: 50%;
+    color: white;
+    text-shadow: 0 -1px 1px rgba(0,0,0,.3);
+}
+
+div.radioContainer input[type="radio"]:empty {
+	margin-left: -999px;
+	visibility: hidden;
+}
+
+div.radioContainer input[type="radio"]:empty ~ label {
+	position: relative;
+	float: left;
+	line-height: 2.4em;
+	text-indent: 3.25em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+@-moz-document url-prefix() {
+    div.radioContainer:not(:first-of-type) {
+        margin-left: 2.8em;
+    }
+	div.radioContainer {
+		transform: translate(-50px, 0px);
+	}
+}
+
+div.radioContainer input[type="radio"]:empty ~ label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+    border-radius: inherit;
+    background: white;
+    background-image: linear-gradient(rgba(0,0,0,.2), transparent);
+    box-shadow: 0 .1em .1em .1em hsla(0,0%,100%,.8) inset,
+    0 0 .5em rgba(0,0,0,.3);
+	text-indent: 0.0em;
+	color: #AAA;
+	text-align: center;
+}
+
+div.radioContainer input[type="radio"].btnDown:empty ~ label:before {
+	content:'\2193';
+}
+
+div.radioContainer input[type="radio"].btnStop:empty ~ label:before {
+	content:'\25A0';
+}
+
+div.radioContainer input[type="radio"].btnUp:empty ~ label:before {
+	content:'\2191';
+}
+
+div.radioContainer input[type="radio"]:hover:not(:checked) ~ label:before {
+	color: #555;
+}
+
+div.radioContainer input[type="radio"].btnDown:hover:not(:checked) ~ label:before {
+	content:'\2193';
+}
+
+div.radioContainer input[type="radio"].btnStop:hover:not(:checked) ~ label:before {
+	content:'\25A0';
+}
+
+div.radioContainer input[type="radio"].btnUp:hover:not(:checked) ~ label:before {
+	content:'\2191';
+}
+
+div.radioContainer input[type="radio"]:checked ~ label:before {
+	text-indent: .0em;
+	color: #333;
+	background-color: #27ae60;
+	box-shadow: 0 0 0 3px #999;
+}
+
+div.radioContainer input[type="radio"].btnDown:checked ~ label:before {
+	content:'\2193';
+}
+
+div.radioContainer input[type="radio"].btnStop:checked ~ label:before {
+	content:'\25A0';
+}
+
+div.radioContainer input[type="radio"].btnUp:checked ~ label:before {
+	content:'\2191';
+}
+
+div.radioContainer input[type="radio"]:checked ~ label {
+	color: #777;
+}

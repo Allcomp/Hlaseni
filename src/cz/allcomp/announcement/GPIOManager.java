@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import com.pi4j.gpio.extension.pcf.PCF8574GpioProvider;
+import com.pi4j.gpio.extension.pcf.PCF8574Pin;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
@@ -14,6 +16,8 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
+import com.pi4j.io.i2c.I2CBus;
+import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
 import cz.allcomp.shs.logging.Messages;
 
@@ -21,9 +25,11 @@ public class GPIOManager {
 	private final GpioController gpio;
 
 	private final GpioPinDigitalOutput pinAmplifierPower;
-	private final GpioPinDigitalOutput pinAmplifierEnable;
-	private final GpioPinDigitalOutput pinLed;
+	private final GpioPinDigitalOutput pinAmplifierEnable;//, pinAmplifierEnable2;
+	//private final GpioPinDigitalOutput pinLed;
 	private final GpioPinDigitalInput pinButton;
+	
+	private final PCF8574GpioProvider i2cRegister;
 	
 	private PinState lastButtonState;
 	
@@ -35,15 +41,22 @@ public class GPIOManager {
 	
 	//private boolean enableLiveAnnouncement, buttonBlocked;
 	
-	public GPIOManager(long powerPause, long enablePause, Announcements announcements) {
+	public GPIOManager(long powerPause, long enablePause, Announcements announcements) throws UnsupportedBusNumberException, IOException {
 		this.gpio = GpioFactory.getInstance();
-		this.pinAmplifierPower = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "AmplifierPower", PinState.LOW);
-		this.pinAmplifierEnable = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "AmplifierEnable", PinState.LOW);
-		this.pinLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "LED", PinState.LOW);
+		
+		//this.pinAmplifierPower = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "AmplifierPower", PinState.LOW);
+		//this.pinAmplifierEnable = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "AmplifierEnable", PinState.LOW);
+		this.i2cRegister = new PCF8574GpioProvider(I2CBus.BUS_1, PCF8574GpioProvider.PCF8574A_0x3F);
+		
+		this.pinAmplifierPower = gpio.provisionDigitalOutputPin(this.i2cRegister, PCF8574Pin.GPIO_05);
+		this.pinAmplifierEnable = gpio.provisionDigitalOutputPin(this.i2cRegister, PCF8574Pin.GPIO_06);
+		//this.pinAmplifierEnable2 = gpio.provisionDigitalOutputPin(this.i2cRegister, PCF8574Pin.GPIO_05);
+		
+		//this.pinLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "LED", PinState.LOW);
 		this.pinButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_12, PinPullResistance.PULL_UP);
 		this.pinAmplifierPower.setShutdownOptions(true, PinState.LOW);
 		this.pinAmplifierEnable.setShutdownOptions(true, PinState.LOW);
-		this.pinLed.setShutdownOptions(true, PinState.LOW);
+		//this.pinLed.setShutdownOptions(true, PinState.LOW);
 		this.pinButton.setShutdownOptions(true);
 		this.powerPause = powerPause;
 		this.enablePause = enablePause;
@@ -128,11 +141,11 @@ public class GPIOManager {
 					return;
 				}
 			}
-			this.pinLed.high();
+			//this.pinLed.high();
 			Messages.info("<GPIOManager> Speaking is now possible.");
 			while(!this.shouldBreakLive);
 			Messages.info("<GPIOManager> Speaking is not possible anymore.");
-			this.pinLed.low();
+			//this.pinLed.low();
 			Messages.info("<GPIOManager> Disabling amplifier...");
 			this.unuseAmplifier();
 			Messages.info("<GPIOManager> Live output ended.");
