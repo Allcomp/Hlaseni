@@ -2,42 +2,37 @@ package cz.allcomp.announcement;
 
 import java.io.IOException;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-import com.pi4j.gpio.extension.pcf.PCF8574GpioProvider;
-import com.pi4j.gpio.extension.pcf.PCF8574Pin;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalInput;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.PinPullResistance;
-import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.RaspiPin;
-import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
-import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.pi4j.io.i2c.I2CBus;
+import com.pi4j.io.i2c.I2CDevice;
+import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
 import cz.allcomp.shs.logging.Messages;
 
 public class GPIOManager {
+	public static final byte AMPLIFIER_POWER_ON_DISABLED = 0b00100000;
+	public static final byte AMPLIFIER_POWER_ON_ENABLED = 0b01100000;
+	public static final byte AMPLIFIER_POWER_OFF = 0b00000000;
+	
 	private final GpioController gpio;
 
-	private final GpioPinDigitalOutput pinAmplifierPower;
-	private final GpioPinDigitalOutput pinAmplifierEnable;//, pinAmplifierEnable2;
+	//private final GpioPinDigitalOutput pinAmplifierPower;
+	//private final GpioPinDigitalOutput pinAmplifierEnable;//, pinAmplifierEnable2;
 	//private final GpioPinDigitalOutput pinLed;
-	private final GpioPinDigitalInput pinButton;
+	//private final GpioPinDigitalInput pinButton;
 	
-	private final PCF8574GpioProvider i2cRegister;
+	//private final PCF8574GpioProvider i2cRegister;
 	
-	private PinState lastButtonState;
+	//private PinState lastButtonState;
 	
-	private Announcements announcements;
+	//private Announcements announcements;
 	
 	private final long powerPause, enablePause;
+	private final I2CDevice i2cRegister;
 	
-	private Process currentProcess;
+	//private Process currentProcess;
 	
 	//private boolean enableLiveAnnouncement, buttonBlocked;
 	
@@ -46,27 +41,30 @@ public class GPIOManager {
 		
 		//this.pinAmplifierPower = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "AmplifierPower", PinState.LOW);
 		//this.pinAmplifierEnable = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "AmplifierEnable", PinState.LOW);
-		this.i2cRegister = new PCF8574GpioProvider(I2CBus.BUS_1, PCF8574GpioProvider.PCF8574A_0x3F);
+		//this.i2cRegister = new PCF8574GpioProvider(I2CBus.BUS_1, PCF8574GpioProvider.PCF8574A_0x3F);
 		
-		this.pinAmplifierPower = gpio.provisionDigitalOutputPin(this.i2cRegister, PCF8574Pin.GPIO_05);
-		this.pinAmplifierEnable = gpio.provisionDigitalOutputPin(this.i2cRegister, PCF8574Pin.GPIO_06);
+		//this.pinAmplifierPower = gpio.provisionDigitalOutputPin(this.i2cRegister, PCF8574Pin.GPIO_05);
+		//this.pinAmplifierEnable = gpio.provisionDigitalOutputPin(this.i2cRegister, PCF8574Pin.GPIO_06);
 		//this.pinAmplifierEnable2 = gpio.provisionDigitalOutputPin(this.i2cRegister, PCF8574Pin.GPIO_05);
 		
 		//this.pinLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "LED", PinState.LOW);
-		this.pinButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_12, PinPullResistance.PULL_UP);
-		this.pinAmplifierPower.setShutdownOptions(true, PinState.LOW);
-		this.pinAmplifierEnable.setShutdownOptions(true, PinState.LOW);
+		//this.pinButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_12, PinPullResistance.PULL_UP);
+		//this.pinAmplifierPower.setShutdownOptions(true, PinState.LOW);
+		//this.pinAmplifierEnable.setShutdownOptions(true, PinState.LOW);
 		//this.pinLed.setShutdownOptions(true, PinState.LOW);
-		this.pinButton.setShutdownOptions(true);
+		//this.pinButton.setShutdownOptions(true);
 		this.powerPause = powerPause;
 		this.enablePause = enablePause;
-		this.lastButtonState = PinState.HIGH;
-		this.announcements = announcements;
+		//this.lastButtonState = PinState.HIGH;
+		//this.announcements = announcements;
 		//this.enableLiveAnnouncement = false;
 		//this.buttonBlocked = false;
-		this.currentProcess = null;
+		//this.currentProcess = null;
 		
-		this.pinButton.addListener(new GpioPinListenerDigital() {
+		final I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
+		this.i2cRegister = bus.getDevice(0x3F);
+		
+		/*this.pinButton.addListener(new GpioPinListenerDigital() {
            
 			@Override
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
@@ -96,10 +94,10 @@ public class GPIOManager {
                 }
             }
 
-        });
+        });*/
 	}
 
-	private boolean startedPlayingLive = false;
+	/*private boolean startedPlayingLive = false;
 	private boolean shouldBreakLive = false;
 	
 	private void buttonClicked() throws InterruptedException, LineUnavailableException, IOException, UnsupportedAudioFileException {
@@ -153,7 +151,7 @@ public class GPIOManager {
 			this.currentProcess = null;
 			this.startedPlayingLive = false;
 		}
-	}
+	}*/
 	
 	/*private void buttonClicked2() throws InterruptedException {
 		if(this.buttonBlocked)
@@ -194,21 +192,48 @@ public class GPIOManager {
 	}*/
 	
 	public void useAmplifier() {
+		try {
+			this.i2cRegister.write(GPIOManager.AMPLIFIER_POWER_ON_DISABLED);
+			Messages.info("Amplifier powered.");
+			Thread.sleep(this.powerPause);
+		} catch (InterruptedException | IOException e) {
+			Messages.warning(Messages.getStackTrace(e));
+		}
+		try {
+			this.i2cRegister.write(GPIOManager.AMPLIFIER_POWER_ON_ENABLED);
+			Messages.info("Amplifier enabled.");
+			Thread.sleep(this.enablePause);
+		} catch (InterruptedException | IOException e) {
+			Messages.warning(Messages.getStackTrace(e));
+		}
+	}
+	
+	public void unuseAmplifier() {
+		try {
+			this.i2cRegister.write(GPIOManager.AMPLIFIER_POWER_OFF);
+		} catch (IOException e) {
+			Messages.warning(Messages.getStackTrace(e));
+		}
+	}
+	
+	/*public void useAmplifier() {
 		this.powerOnAmplifier();
+		Messages.info("Amplifier powered.");
 		try {
 			Thread.sleep(this.powerPause);
 		} catch (InterruptedException e) {
 			Messages.warning(Messages.getStackTrace(e));
 		}
 		this.enableAmplifier();
+		Messages.info("Amplifier enabled.");
 		try {
 			Thread.sleep(this.enablePause);
 		} catch (InterruptedException e) {
 			Messages.warning(Messages.getStackTrace(e));
 		}
-	}
+	}*/
 	
-	public void unuseAmplifier() {
+	/*public void unuseAmplifier() {
 		this.disableAmplifier();
 		this.powerOffAmplifier();
 	}
@@ -218,7 +243,7 @@ public class GPIOManager {
 	}
 	
 	private void powerOffAmplifier() {
-		pinAmplifierPower.low();;
+		pinAmplifierPower.low();
 	}
 	
 	private void enableAmplifier() {
@@ -227,7 +252,7 @@ public class GPIOManager {
 	
 	private void disableAmplifier() {
 		pinAmplifierEnable.low();
-	}
+	}*/
 	
 	public long getPowerPause() {
 		return this.powerPause;
